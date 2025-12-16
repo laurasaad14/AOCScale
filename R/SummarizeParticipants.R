@@ -17,6 +17,8 @@ SummarizeParticipants <- function(df, ShowVideos=FALSE, ShowItems=FALSE) {
     P.df <- df %>%
         group_by(Subject, Condition) %>%
         slice_head(n=1) 
+    
+    P.df$Age <- as.numeric(P.df$Age)
 
     ExperimentTime <- mean(P.df$ExperimentMinutesDuration)
     ParticipantAge <- mean(P.df$Age, na.rm = TRUE)

@@ -2,12 +2,12 @@
 ### Experiment setup ###
 ########################
 
-experimentName <- "PD1"
+experimentName <- "AOC1"
 whoami <- Sys.info()[["user"]]
 if (whoami == "trafton") {
     workingDirectory <- "~/Documents/graphics/PerceivedDanger/"
 } else if (whoami == "saad-admin") {
-  workingDirectory <- "~/PerceivedDanger/"
+  workingDirectory <- "~/AOCScale/"
 } ## you need to put your own workingDirectory here with your whoami
 
 source(paste0(workingDirectory, "R/helper.R"))
@@ -28,10 +28,10 @@ IgnorePrevious <- TRUE  ## FALSE
 if (IgnorePrevious) {
     MaxSubject <- 0 ## 
 
-    pd1.df <- pd1.df %>%
+    aoc1.df <- aoc1.df %>%
         filter(Subject > MaxSubject)
 
-    pd1.wide <- pd1.wide %>%
+    aoc1.wide <- aoc1.wide %>%
         filter(Subject > MaxSubject)
 
 }
@@ -39,13 +39,13 @@ showSummary <- TRUE  ## FALSE
 showAttentionCheck <- TRUE ## FALSE
 
 ####################################################################################
-## Prints out trial summaries (not needed in PD)  and final experiment summaries  ##
+## Prints out trial summaries (not needed in aoc)  and final experiment summaries  ##
 ## I find that our attention check captures P who do not do task and is defensible #
 ####################################################################################
 
 if (showSummary) {
 
-    df.summaryVideo <- pd1.df %>%
+    df.summaryVideo <- aoc1.df %>%
         group_by(Subject) %>%
         slice_head(n=1) %>%
         dplyr::select(Subject, Language, Condition, VideoFeedback, ExperimentFeedback)
@@ -53,7 +53,7 @@ if (showSummary) {
     for (S in unique(df.summaryVideo$Subject)) {
         df.participant <- df.summaryVideo %>% filter(Subject == S)
         cat("Participant =", S, "(Language:", unique(df.participant$Language), ")", fill=TRUE)
-### not needed because no instance based feedback in pd1
+### not needed because no instance based feedback in aoc1
         ## for (v in df.participant$Video) {
         cat("Video:", unique(df.participant$Condition), ": ")
         cat(df.participant$VideoFeedback, fill=TRUE)
@@ -70,7 +70,7 @@ if (showSummary) {
 ####################
 
 if (showAttentionCheck) {
-    AttentionCheck.df <- pd1.df %>%
+    AttentionCheck.df <- aoc1.df %>%
         group_by(Subject) %>%
         slice_tail(n=1) %>%
         dplyr::select(Subject, 'TotalAttentionChecksMissed')  ## ask malcolm to keep consistent
@@ -84,7 +84,7 @@ if (showAttentionCheck) {
     }
 }
 
-SummarizedInfo.df <- SummarizeParticipants(pd1.df)
+SummarizedInfo.df <- SummarizeParticipants(aoc1.df)
 
 ## I run this script, first checking for attention check problems
 ## Then I look at summaries to do a quick check about what P think about the experiment.

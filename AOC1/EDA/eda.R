@@ -2,7 +2,7 @@
 ### Experiment setup ###
 ########################
 
-experimentName <- "PD1"
+experimentName <- "aoc1"
 whoami <- Sys.info()[["user"]]
 if (whoami == "trafton") {
     workingDirectory <- "~/Documents/graphics/PerceivedDanger/"
@@ -24,7 +24,7 @@ source(paste0(workingDirectory, "R/GetData", experimentName, ".R"))
 ### very simple hist ###
 ########################
 
-## pd1.long %>%
+## aoc1.long %>%
 ##   ggplot(aes(x=Response)) +
 ##   geom_histogram()
 ## ggsave(paste0(graphSaveDirectory, "overallHist.pdf"))
@@ -45,42 +45,103 @@ source(paste0(workingDirectory, "R/GetData", experimentName, ".R"))
 ###
 cat(fill=TRUE)
 cat("Number of questions that each P answered:", fill=TRUE)
-print(rowSums(table(pd1.long$Subject, pd1.long$Response)))
+print(rowSums(table(aoc1.long$Subject, aoc1.long$Response)))
 
-totalItems <- 28  ## have to change it for every experiment
+totalItems <- 21  ## have to change it for every experiment
 cat("Participants that did not answer", totalItems, "questions:", fill=TRUE)
-rowSums(table(pd1.long$Subject, pd1.long$Response))[which(rowSums(table(pd1.long$Subject, pd1.long$Response)) != totalItems)]
+rowSums(table(aoc1.long$Subject, aoc1.long$Response))[which(rowSums(table(aoc1.long$Subject, aoc1.long$Response)) != totalItems)]
 
-#### PD items
-itemsPD %>%
+#### aoc items
+itemsAOC %>%
+  mutate(Subject = factor(Subject)) %>%
   rowwise() %>%
-  dplyr::mutate(PDMean = mean(c_across(where(is.numeric)))) %>%
-  ggplot(aes(x=reorder(Condition, PDMean, FUN=mean), y=PDMean)) +
+  dplyr::mutate(aocMean = mean(c_across(where(is.numeric)))) %>%
+  ggplot(aes(x=reorder(Condition, aocMean, FUN=mean), y=aocMean)) +
   geom_boxplot() +
   theme(axis.text.x = element_text(angle = 45)) +
-  ggtitle("PDMean (all items)") +
+  ggtitle("aocMean (all items)") +
   ylim(1, 6)
-ggsave(paste0(graphSaveDirectory, "PD.boxplot.pdf"))
+ggsave(paste0(graphSaveDirectory, "aoc.boxplot.pdf"))
 
-for (i in 1:length(PDAll)) {
-pd1.long %>%
-  filter(Question == PDAll[i]) %>%
+
+## plot videos for each of the a priori hypothesized factors
+
+# self (expect to see cheater, closeted, and secrets higher than the rest)
+
+itemsSelf %>%
+  mutate(Subject = factor(Subject)) %>%
+  rowwise() %>%
+  dplyr::mutate(aocSelfMean = mean(c_across(where(is.numeric)))) %>%
+  ggplot(aes(x=reorder(Condition, aocSelfMean, FUN=mean), y=aocSelfMean)) +
+  geom_boxplot() +
+  theme(axis.text.x = element_text(angle = 45)) +
+  ggtitle("aoc Mean (Self Items only)") +
+  ylim(1, 6)
+ggsave(paste0(graphSaveDirectory, "aocSelf.boxplot.pdf"))
+
+
+# predetermined (expect to see feeder, welding, and dishes higher than the rest)
+
+itemsPredetermined %>%
+  mutate(Subject = factor(Subject)) %>%
+  rowwise() %>%
+  dplyr::mutate(aocPredMean = mean(c_across(where(is.numeric)))) %>%
+  ggplot(aes(x=reorder(Condition, aocPredMean, FUN=mean), y=aocPredMean)) +
+  geom_boxplot() +
+  theme(axis.text.x = element_text(angle = 45)) +
+  ggtitle("aoc Mean (Predetermined Items only)") +
+  ylim(1, 6)
+ggsave(paste0(graphSaveDirectory, "aocPredtermined.boxplot.pdf"))
+
+
+# external (expect to see gello, firefighter, tai-chi higher than the rest)
+
+itemsExternal %>%
+  mutate(Subject = factor(Subject)) %>%
+  rowwise() %>%
+  dplyr::mutate(aocExterMean = mean(c_across(where(is.numeric)))) %>%
+  ggplot(aes(x=reorder(Condition, aocExterMean, FUN=mean), y=aocExterMean)) +
+  geom_boxplot() +
+  theme(axis.text.x = element_text(angle = 45)) +
+  ggtitle("aoc Mean (External Items only)") +
+  ylim(1, 6)
+ggsave(paste0(graphSaveDirectory, "aocExternal.boxplot.pdf"))
+
+
+for (i in 1:length(AOCAll)) {
+aoc1.long %>%
+    
+  mutate(Subject = factor(Subject)) %>%
+  filter(Question == AOCAll[i]) %>%
   ggplot(aes(x=reorder(Condition, Response, FUN=mean), y=Response)) +
   geom_boxplot() +
   geom_jitter(height=.01, width = 0.2) +
   theme(axis.text.x = element_text(angle = 45)) +
-  ggtitle(PDAll[i]) +
+  ggtitle(AOCAll[i]) +
   ylim(.9, 6.1)
-ggsave(paste0(graphSaveDirectory, PDAll[i], ".boxplot.pdf"))
+ggsave(paste0(graphSaveDirectory, AOCAll[i], ".boxplot.pdf"))
 }
 
-#### Gators (P- )items
-itemsPMinus %>%
-  rowwise() %>%
-  dplyr::mutate(pMinus = mean(c_across(where(is.numeric)))) %>%
-  ggplot(aes(x = reorder(Condition, pMinus, FUN=mean), y=pMinus)) +
-  geom_boxplot() +
-  theme(axis.text.x = element_text(angle = 45)) +
-  ggtitle("PMinus (all items)")
-ggsave(paste0(graphSaveDirectory, "PMinus.boxplot.pdf"))
+
+
+
+
+
+
+
+
+
+
+
+
+
+# #### Gators (P- )items
+# itemsPMinus %>%
+#   rowwise() %>%
+#   dplyr::mutate(pMinus = mean(c_across(where(is.numeric)))) %>%
+#   ggplot(aes(x = reorder(Condition, pMinus, FUN=mean), y=pMinus)) +
+#   geom_boxplot() +
+#   theme(axis.text.x = element_text(angle = 45)) +
+#   ggtitle("PMinus (all items)")
+# ggsave(paste0(graphSaveDirectory, "PMinus.boxplot.pdf"))
 
