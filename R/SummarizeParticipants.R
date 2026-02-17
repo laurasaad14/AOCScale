@@ -6,16 +6,16 @@ MakeLine <- function() {
 
 SummarizeParticipants <- function(df, ShowVideos=FALSE, ShowItems=FALSE) {
 
-    NumberP <- length(unique(df$Subject))
+    NumberP <- length(unique(df$subjID))
     # NumberV <- length(unique(df$Video))
-    NumberC <- length(unique(df$Condition))
+    NumberC <- length(unique(df$condition))
     
 
     # AllVideos <- unique(df$Video)
     AllItems <- unique(df$Question)
 
     P.df <- df %>%
-        group_by(Subject, Condition) %>%
+        group_by(subjID, condition) %>%
         slice_head(n=1) 
     
     P.df$Age <- as.numeric(P.df$Age)
@@ -23,10 +23,6 @@ SummarizeParticipants <- function(df, ShowVideos=FALSE, ShowItems=FALSE) {
     ExperimentTime <- mean(P.df$ExperimentMinutesDuration)
     ParticipantAge <- mean(P.df$Age, na.rm = TRUE)
     age_sd <- sd(P.df$Age, na.rm = TRUE)
-#    ScreenTime <- mean(P.df$TimeOnScreen)
-    ## CondCount1 <- str_count(P.df$Condition,"PAPO")
-    ## CondCount2 <- str_count(P.df$Condition,"UAPO")
-    ## CondCount3 <- str_count(P.df$Condition,"PAUO")
     
 
     MakeLine()
@@ -45,7 +41,7 @@ SummarizeParticipants <- function(df, ShowVideos=FALSE, ShowItems=FALSE) {
 
   MakeLine()
   cat("Number of Ps in each condition:", fill=TRUE)
-  print(table(P.df$Condition))
+  print(table(P.df$condition))
   
   # MakeLine()
   # cat("Number of Ps asked each Q:", fill=TRUE)
