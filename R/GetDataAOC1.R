@@ -135,6 +135,7 @@ itemsPredetermined <- AOC.wide %>%
 
 aoc1.itemsOnly <- itemsAOC %>%
     dplyr::select(-c("Subject", "Condition"))
+##    dplyr::select(-c("Subject", "Condition", "acts habitually "))
 
 # ###############################################
 # ##################  Gators  ###################

@@ -1,6 +1,7 @@
 ########################
 ### Experiment setup ###
 ########################
+require(psych)
 
 experimentName <- "AOC1"
 whoami <- Sys.info()[["user"]]
@@ -117,6 +118,16 @@ p3 <- principal(aoc1.itemsOnly,nfactors=3)
 factor.congruence(f3,p3)
 ##fa.lookup(f3, dictionary=items.dict)
 fa.lookup(f3, dictionary=names(aoc1.itemsOnly))
+
+
+## ###################################
+## ######  4 factor solution #########
+## ###################################
+f4 <- fa(aoc1.itemsOnly, nfactors=4)
+p4 <- principal(aoc1.itemsOnly,nfactors=4)
+factor.congruence(f4,p4)
+##fa.lookup(f3, dictionary=items.dict)
+fa.lookup(f4, dictionary=names(aoc1.itemsOnly))
 
 
 
