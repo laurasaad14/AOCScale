@@ -6,21 +6,24 @@ MakeLine <- function() {
 
 SummarizeParticipants <- function(df, ShowVideos=FALSE, ShowItems=FALSE) {
 
-    NumberP <- length(unique(df$subjID))
+    NumberP <- length(unique(df$Subject))
     # NumberV <- length(unique(df$Video))
-    NumberC <- length(unique(df$condition))
+    NumberC <- length(unique(df$Condition))
     
 
     # AllVideos <- unique(df$Video)
     AllItems <- unique(df$Question)
 
     P.df <- df %>%
-        group_by(subjID, condition) %>%
+        group_by(Subject, Condition) %>%
         slice_head(n=1) 
     
     P.df$Age <- as.numeric(P.df$Age)
 
-    ExperimentTime <- mean(P.df$ExperimentMinutesDuration)
+  if (!exists("P.df$ExperimentMinutesDuration"))
+      ExperimentTime <- NA
+  else
+    ExperimentTime <- mean(P.df$ExperimentMinutesDuration)  ## not in AOC / qualtrics
     ParticipantAge <- mean(P.df$Age, na.rm = TRUE)
     age_sd <- sd(P.df$Age, na.rm = TRUE)
     
@@ -32,16 +35,16 @@ SummarizeParticipants <- function(df, ShowVideos=FALSE, ShowItems=FALSE) {
     # cat("Number of videos: ", NumberV, fill=TRUE)
     cat("Average length of experiment (min)", ExperimentTime, fill=TRUE)
 #    cat("Average length of trial (s)", ScreenTime, fill=TRUE)
-  ### this approach works great!  But if we have different conditions
+  ### this approach works great!  But if we have different Conditions
   ### it will need to be changed.  See the table approach below, which
-  ### should generalize to different conditions.
+  ### should generalize to different Conditions.
     ## cat("Num of Ps in PAPO", sum(CondCount1), fill=TRUE)
     ## cat("Num of Ps in UAPO", sum(CondCount2), fill=TRUE)
     ## cat("Num of Ps in PAUO", sum(CondCount3), fill=TRUE)
 
   MakeLine()
-  cat("Number of Ps in each condition:", fill=TRUE)
-  print(table(P.df$condition))
+  cat("Number of Ps in each Condition:", fill=TRUE)
+  print(table(P.df$Condition))
   
   # MakeLine()
   # cat("Number of Ps asked each Q:", fill=TRUE)

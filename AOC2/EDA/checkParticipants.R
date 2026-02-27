@@ -5,7 +5,7 @@
 experimentName <- "AOC2"
 whoami <- Sys.info()[["user"]]
 if (whoami == "trafton") {
-    workingDirectory <- "~/Documents/graphics/PerceivedDanger/"
+    workingDirectory <- "~/Documents/graphics/AOCScale/"
 } else if (whoami == "saad-admin") {
   workingDirectory <- "~/AOCScale/"
 } ## you need to put your own workingDirectory here with your whoami
@@ -29,10 +29,10 @@ if (IgnorePrevious) {
     MaxSubject <- 0 ## 
 
     aoc2.df <- aoc2.df %>%
-        filter(subjID > MaxSubject)
+        filter(Subject > MaxSubject)
 
     # aoc2.wide <- aoc2.wide %>%
-    #     filter(subjID > MaxSubject)
+    #     filter(Subject > MaxSubject)
 
 }
 showSummary <- TRUE  ## FALSE
@@ -46,12 +46,12 @@ showAttentionCheck <- TRUE ## FALSE
 if (showSummary) {
 
     df.summaryVideo <- aoc2.df %>%
-        group_by(subjID) %>%
+        group_by(Subject) %>%
         slice_head(n=1) %>%
-        dplyr::select(subjID, Language, expFeedback)
+        dplyr::select(Subject, Language, expFeedback)
 # 
-#     for (S in unique(df.summaryVideo$subjID)) {
-#         df.participant <- df.summaryVideo %>% filter(subjID == S)
+#     for (S in unique(df.summaryVideo$Subject)) {
+#         df.participant <- df.summaryVideo %>% filter(Subject == S)
 #         cat("Participant =", S, "(Language:", unique(df.participant$Language), ")", fill=TRUE)
 # ### not needed because no instance based feedback in aoc2
 #         ## for (v in df.participant$Video) {
@@ -71,8 +71,8 @@ if (showSummary) {
 
 if (showAttentionCheck) {
   AttentionCheck.df <- aoc2.df %>%
-    group_by(subjID) %>%
-    dplyr::select(subjID, 'attn_check_missed')  
+    group_by(Subject) %>%
+    dplyr::select(Subject, 'attn_check_missed')
   Problems.df <- subset(AttentionCheck.df, attn_check_missed > 0)
   if (nrow(Problems.df) > 0)
     print(as.data.frame(subset(AttentionCheck.df, attn_check_missed > 0)))

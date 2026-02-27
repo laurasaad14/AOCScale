@@ -31,104 +31,120 @@ if (!is.null(ParticipantsToRemove)) {
 
 aoc2.df <- RemoveParticipants(aoc2.df, ParticipantsToRemove, report=TRUE)
 
+aoc2.df <- aoc2.df %>% rename(Subject = subjID)
+aoc2.df <- aoc2.df %>% rename(Condition = condition)
+aoc2.df <- aoc2.df %>% rename(Gender = Sex)
 
-# ########################
-# ### common dataframes  #
-# ########################
-# 
-# ### df.wide is primarily for psych and correlations
-# aoc2.wide <- aoc2.df %>%
-#     dplyr::select(Subject, Condition, Question, Response) %>% 
-#     pivot_wider(
-#         names_from = Question,
-#         values_from = Response
-#     )
-# aoc2.long <- aoc2.wide %>%
-#     pivot_longer(!c(Subject, Condition),
-#                  names_to = "Question",
-#                  values_to = "Response")
-# 
-# ######################################
-# ### Any other datasets needed?   #####
-# ######################################
-# 
-# AOC.wide <- aoc2.wide
-# 
-# 
-# AOCAll <- c("makes own decisions to act",
-#             "can intentionally control own behavior",
-#             "has a sequence of steps to follow",
-#             "has actions that are based on own beliefs",
-#             "is controlled by an external entity",
-#             "is being puppeted",
-#             "has actions that are scripted",
-#             "acts according to a predefined set of rules",
-#             "acts based on own goals",
-#             "can decide to act without input from others",
-#             "is dependent on an operator",
-#             "acts on someone else's decision",
-#             "has a predetermined set of actions",
-#             "follows a fixed procedure",
-#             "is remotely controlled",
-#             "has behavior that is routine",
-#             "acts habitually ",
-#             "follows actions chosen by another",
-#             "can decide to behave differently",
-#             "wanted to perform these actions",
-#             "is told how to act"
-# )  
-# 
-# 
-# AOCPredetermined <- c("follows a fixed procedure",
-#                       "acts according to a predefined set of rules",
-#                       "has a predetermined set of actions",
-#                       "has actions that are scripted",
-#                       "has behavior that is routine",
-#                       "has a sequence of steps to follow",
-#                       "acts habitually ")
-# 
-# AOCExternal <- c("is controlled by an external entity",
-#                  "is remotely controlled",
-#                  "is being puppeted",
-#                  "acts on someone else's decision",
-#                  "follows actions chosen by another",
-#                  "is dependent on an operator",
-#                  "is told how to act")
-# 
-# AOCSelf <- c("acts based on own goals",
-#              "can intentionally control own behavior",
-#              "has actions that are based on own beliefs",
-#              "can decide to act without input from others",
-#              "makes own decisions to act",
-#              "wanted to perform these actions",
-#              "can decide to behave differently"
-#              )
-# 
-# 
-# IDS <- NULL
-# 
-# ExpInfo <- c("Subject", "Condition")
-# 
-# GroupingVars <- c(ExpInfo, IDS)
-# 
-# itemsAOC <- AOC.wide %>%
-#     ungroup() %>%
-#     dplyr::select(all_of(c(ExpInfo, AOCAll)))
-# 
-# itemsSelf <- AOC.wide %>%
-#   ungroup() %>%
-#   dplyr::select(all_of(c(ExpInfo, AOCSelf)))
-# 
-# itemsExternal <- AOC.wide %>%
-#   ungroup() %>%
-#   dplyr::select(all_of(c(ExpInfo, AOCExternal)))
-# 
-# itemsPredetermined <- AOC.wide %>%
-#   ungroup() %>%
-#   dplyr::select(all_of(c(ExpInfo, AOCPredetermined)))
-# 
-# aoc2.itemsOnly <- itemsAOC %>%
-#     dplyr::select(-c("Subject", "Condition"))
+### greg stopped b/c ran out of time
+### [2026-02-19 Thu 12:06]
+
+## ########################
+## ### common dataframes  #
+## ########################
+
+aoc2.long <- aoc2.df %>%
+    pivot_longer(!c(Subject, Condition, video_summary, Gender, Language, Education, Age, Race, expFeedback, Gello_AOC_17, Taichi_AOC_17, attn_check_missed),
+                 names_to = "Question",
+                 values_to = "Response") %>%
+  mutate(Question = str_replace_all(Question, "\\.", " ")) %>%
+  mutate(Question = str_squish(Question))
+
+
+## ### df.wide is primarily for psych and correlations
+aoc2.wide <- aoc2.long %>%
+    dplyr::select(Subject, Condition, Question, Response) %>%
+    pivot_wider(
+        names_from = Question,
+        values_from = Response
+    )
+
+## ## ## aoc2.long <- aoc2.wide %>%
+## ## aoc2.long <- aoc2.df %>%
+## ##     pivot_longer(!c(Subject, Condition, video_summary, Sex, Language, Education, Race, expFeedback),
+## ##                  names_to = "Question",
+## ##                  values_to = "Response")
+
+## ## ######################################
+## ### Any other datasets needed?   #####
+## ######################################
+
+## AOC.wide <- aoc2.wide
+
+
+## AOCAll <- c("makes own decisions to act",
+##             "can intentionally control own behavior",
+##             "has a sequence of steps to follow",
+##             "has actions that are based on own beliefs",
+##             "is controlled by an external entity",
+##             "is being puppeted",
+##             "has actions that are scripted",
+##             "acts according to a predefined set of rules",
+##             "acts based on own goals",
+##             "can decide to act without input from others",
+##             "is dependent on an operator",
+##             "acts on someone else's decision",
+##             "has a predetermined set of actions",
+##             "follows a fixed procedure",
+##             "is remotely controlled",
+##             "has behavior that is routine",
+##             "acts habitually ",
+##             "follows actions chosen by another",
+##             "can decide to behave differently",
+##             "wanted to perform these actions",
+##             "is told how to act"
+## )
+
+
+## AOCPredetermined <- c("follows a fixed procedure",
+##                       "acts according to a predefined set of rules",
+##                       "has a predetermined set of actions",
+##                       "has actions that are scripted",
+##                       "has behavior that is routine",
+##                       "has a sequence of steps to follow",
+##                       "acts habitually ")
+
+## AOCExternal <- c("is controlled by an external entity",
+##                  "is remotely controlled",
+##                  "is being puppeted",
+##                  "acts on someone else's decision",
+##                  "follows actions chosen by another",
+##                  "is dependent on an operator",
+##                  "is told how to act")
+
+## AOCSelf <- c("acts based on own goals",
+##              "can intentionally control own behavior",
+##              "has actions that are based on own beliefs",
+##              "can decide to act without input from others",
+##              "makes own decisions to act",
+##              "wanted to perform these actions",
+##              "can decide to behave differently"
+##              )
+
+
+## IDS <- NULL
+
+## ExpInfo <- c("Subject", "Condition")
+
+## GroupingVars <- c(ExpInfo, IDS)
+
+## itemsAOC <- AOC.wide %>%
+##     ungroup() %>%
+##     dplyr::select(all_of(c(ExpInfo, AOCAll)))
+
+## itemsSelf <- AOC.wide %>%
+##   ungroup() %>%
+##   dplyr::select(all_of(c(ExpInfo, AOCSelf)))
+
+## itemsExternal <- AOC.wide %>%
+##   ungroup() %>%
+##   dplyr::select(all_of(c(ExpInfo, AOCExternal)))
+
+## itemsPredetermined <- AOC.wide %>%
+##   ungroup() %>%
+##   dplyr::select(all_of(c(ExpInfo, AOCPredetermined)))
+
+## aoc2.itemsOnly <- itemsAOC %>%
+##     dplyr::select(-c("Subject", "Condition"))
 
 # ###############################################
 # ##################  Gators  ###################
