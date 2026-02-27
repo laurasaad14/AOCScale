@@ -2,18 +2,18 @@
 ### Experiment setup ###
 ########################
 
-experimentName <- "aoc2"
+experimentName <- "AOC2"
 whoami <- Sys.info()[["user"]]
 if (whoami == "trafton") {
-    workingDirectory <- "~/Documents/graphics/PerceivedDanger/"
+    workingDirectory <- "~/Documents/graphics/AOCScale/"
 } else if (whoami == "saad-admin") {
-  workingDirectory <- "~/PerceivedDanger/"
+  workingDirectory <- "~/AOCScale/"
 } ## you need to put your own workingDirectory here with your whoami
 
 source(paste0(workingDirectory, "R/helper.R"))
 source(paste0(workingDirectory, "R/SummarizeParticipants.R"))
 graphSaveDirectory <- paste0(workingDirectory, "graphs/", experimentName, "/")
-dataDirectory <- paste0(workingDirectory, "data/raw/", experimentName, "/")
+dataDirectory <- paste0(workingDirectory, "data/", experimentName, "/")
 setwd(workingDirectory)
 VerifyPathIsSafe(graphSaveDirectory)
 VerifyPathIsSafe(dataDirectory)
@@ -45,9 +45,9 @@ source(paste0(workingDirectory, "R/GetData", experimentName, ".R"))
 ###
 cat(fill=TRUE)
 cat("Number of questions that each P answered:", fill=TRUE)
-print(rowSums(table(aoc2.long$subjID, aoc2.long$Response)))
+print(rowSums(table(aoc2.long$Subject, aoc2.long$Response)))
 
-totalItems <- 21  ## have to change it for every experiment
+totalItems <- 64  ## have to change it for every experiment
 cat("Participants that did not answer", totalItems, "questions:", fill=TRUE)
 rowSums(table(aoc2.long$Subject, aoc2.long$Response))[which(rowSums(table(aoc2.long$Subject, aoc2.long$Response)) != totalItems)]
 
@@ -96,18 +96,32 @@ ggsave(paste0(graphSaveDirectory, "aocPredtermined.boxplot.pdf"))
 
 # external (expect to see gello, firefighter, tai-chi higher than the rest)
 
-itemsExternal %>%
+itemsTeleOp %>%
   mutate(Subject = factor(Subject)) %>%
   rowwise() %>%
   dplyr::mutate(aocExterMean = mean(c_across(where(is.numeric)))) %>%
   ggplot(aes(x=reorder(Condition, aocExterMean, FUN=mean), y=aocExterMean)) +
   geom_boxplot() +
   theme(axis.text.x = element_text(angle = 45)) +
-  ggtitle("aoc Mean (External Items only)") +
+  ggtitle("aoc Mean (Teleop Items only)") +
   ylim(1, 6)
-ggsave(paste0(graphSaveDirectory, "aocExternal.boxplot.pdf"))
+ggsave(paste0(graphSaveDirectory, "aocTeleOp.boxplot.pdf"))
 
 
+itemsSupervisor %>%
+  mutate(Subject = factor(Subject)) %>%
+  rowwise() %>%
+  dplyr::mutate(aocExterMean = mean(c_across(where(is.numeric)))) %>%
+  ggplot(aes(x=reorder(Condition, aocExterMean, FUN=mean), y=aocExterMean)) +
+  geom_boxplot() +
+  theme(axis.text.x = element_text(angle = 45)) +
+  ggtitle("aoc Mean (Supervisor Items only)") +
+  ylim(1, 6)
+ggsave(paste0(graphSaveDirectory, "aocSupervisor.boxplot.pdf"))
+
+
+### greg does not love this with so little data.  uncomment later if want to see all items...
+if (F) {
 for (i in 1:length(AOCAll)) {
 aoc2.long %>%
     
@@ -121,27 +135,4 @@ aoc2.long %>%
   ylim(.9, 6.1)
 ggsave(paste0(graphSaveDirectory, AOCAll[i], ".boxplot.pdf"))
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# #### Gators (P- )items
-# itemsPMinus %>%
-#   rowwise() %>%
-#   dplyr::mutate(pMinus = mean(c_across(where(is.numeric)))) %>%
-#   ggplot(aes(x = reorder(Condition, pMinus, FUN=mean), y=pMinus)) +
-#   geom_boxplot() +
-#   theme(axis.text.x = element_text(angle = 45)) +
-#   ggtitle("PMinus (all items)")
-# ggsave(paste0(graphSaveDirectory, "PMinus.boxplot.pdf"))
-
+}
