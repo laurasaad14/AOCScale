@@ -43,7 +43,7 @@ aoc2.df <- aoc2.df %>% rename(Gender = Sex)
 ## ########################
 
 aoc2.long <- aoc2.df %>%
-    pivot_longer(!c(Subject, Condition, video_summary, Gender, Language, Education, Age, Race, expFeedback, Gello_AOC_17, Taichi_AOC_17, attn_check_missed),
+    pivot_longer(!c(Subject, Condition, video_summary, Gender, Language, Education, Age, Race, expFeedback, Gello_AOC_17, Taichi_AOC_17, attn_check_missed, X),
                  names_to = "Question",
                  values_to = "Response") %>%
   mutate(Question = str_replace_all(Question, "\\.", " ")) %>%
@@ -58,93 +58,79 @@ aoc2.wide <- aoc2.long %>%
         values_from = Response
     )
 
-## ## ## aoc2.long <- aoc2.wide %>%
-## ## aoc2.long <- aoc2.df %>%
-## ##     pivot_longer(!c(Subject, Condition, video_summary, Sex, Language, Education, Race, expFeedback),
-## ##                  names_to = "Question",
-## ##                  values_to = "Response")
-
 ## ## ######################################
 ## ### Any other datasets needed?   #####
 ## ######################################
 
-## AOC.wide <- aoc2.wide
+AOC.wide <- aoc2.wide
+
+AOCAll <- c("can intentionally control own behavior",
+            "Has actions that are based on own beliefs",
+            "Can decide to behave differently",
+            "Acts based on own goals",
+            "Is told how to act by a supervisor",
+            "Needs to interpret verbal instructions to determine what actions to take",
+            "Only follows verbal or written communication from a boss",
+            "Exclusively acts based on instructions communicated by a manager",
+            "Is being puppeted",
+            "Is remotely controlled",
+            "Is directly maneuvered by another",
+            "Actions are directly linked to physical actions of another",
+            "Repeats same set of actions over and over again",
+            "Acts according to a fixed pattern",
+            "Only moves using preplanned actions",
+            "Responds according to a pre established set of actions")
+
+AOCPredetermined <- c("Repeats same set of actions over and over again",
+            "Acts according to a fixed pattern",
+            "Only moves using preplanned actions",
+            "Responds according to a pre established set of actions")
+
+AOCSelf <- c("can intentionally control own behavior",
+             "Has actions that are based on own beliefs",
+             "Can decide to behave differently",
+             "Acts based on own goals")
+
+AOCTeleOp <- c("Is being puppeted",
+               "Is remotely controlled",
+               "Is directly maneuvered by another",
+               "Actions are directly linked to physical actions of another")
+
+AOCSupervisor <- c("Is told how to act by a supervisor",
+                   "Needs to interpret verbal instructions to determine what actions to take",
+                   "Only follows verbal or written communication from a boss",
+                   "Exclusively acts based on instructions communicated by a manager")
 
 
-## AOCAll <- c("makes own decisions to act",
-##             "can intentionally control own behavior",
-##             "has a sequence of steps to follow",
-##             "has actions that are based on own beliefs",
-##             "is controlled by an external entity",
-##             "is being puppeted",
-##             "has actions that are scripted",
-##             "acts according to a predefined set of rules",
-##             "acts based on own goals",
-##             "can decide to act without input from others",
-##             "is dependent on an operator",
-##             "acts on someone else's decision",
-##             "has a predetermined set of actions",
-##             "follows a fixed procedure",
-##             "is remotely controlled",
-##             "has behavior that is routine",
-##             "acts habitually ",
-##             "follows actions chosen by another",
-##             "can decide to behave differently",
-##             "wanted to perform these actions",
-##             "is told how to act"
-## )
 
+IDS <- NULL
 
-## AOCPredetermined <- c("follows a fixed procedure",
-##                       "acts according to a predefined set of rules",
-##                       "has a predetermined set of actions",
-##                       "has actions that are scripted",
-##                       "has behavior that is routine",
-##                       "has a sequence of steps to follow",
-##                       "acts habitually ")
+ExpInfo <- c("Subject", "Condition")
 
-## AOCExternal <- c("is controlled by an external entity",
-##                  "is remotely controlled",
-##                  "is being puppeted",
-##                  "acts on someone else's decision",
-##                  "follows actions chosen by another",
-##                  "is dependent on an operator",
-##                  "is told how to act")
+GroupingVars <- c(ExpInfo, IDS)
 
-## AOCSelf <- c("acts based on own goals",
-##              "can intentionally control own behavior",
-##              "has actions that are based on own beliefs",
-##              "can decide to act without input from others",
-##              "makes own decisions to act",
-##              "wanted to perform these actions",
-##              "can decide to behave differently"
-##              )
+itemsAOC <- AOC.wide %>%
+    ungroup() %>%
+    dplyr::select(all_of(c(ExpInfo, AOCAll)))
 
+itemsSelf <- AOC.wide %>%
+  ungroup() %>%
+  dplyr::select(all_of(c(ExpInfo, AOCSelf)))
 
-## IDS <- NULL
+itemsPredetermined <- AOC.wide %>%
+  ungroup() %>%
+  dplyr::select(all_of(c(ExpInfo, AOCPredetermined)))
 
-## ExpInfo <- c("Subject", "Condition")
+itemsTeleOp <- AOC.wide %>%
+  ungroup() %>%
+  dplyr::select(all_of(c(ExpInfo, AOCTeleOp)))
 
-## GroupingVars <- c(ExpInfo, IDS)
+itemsSupervisor <- AOC.wide %>%
+  ungroup() %>%
+  dplyr::select(all_of(c(ExpInfo, AOCSupervisor)))
 
-## itemsAOC <- AOC.wide %>%
-##     ungroup() %>%
-##     dplyr::select(all_of(c(ExpInfo, AOCAll)))
-
-## itemsSelf <- AOC.wide %>%
-##   ungroup() %>%
-##   dplyr::select(all_of(c(ExpInfo, AOCSelf)))
-
-## itemsExternal <- AOC.wide %>%
-##   ungroup() %>%
-##   dplyr::select(all_of(c(ExpInfo, AOCExternal)))
-
-## itemsPredetermined <- AOC.wide %>%
-##   ungroup() %>%
-##   dplyr::select(all_of(c(ExpInfo, AOCPredetermined)))
-
-## aoc2.itemsOnly <- itemsAOC %>%
-##     dplyr::select(-c("Subject", "Condition"))
+aoc2.itemsOnly <- itemsAOC %>%
+    dplyr::select(-c("Subject", "Condition"))
 
 # ###############################################
 # ##################  Gators  ###################
