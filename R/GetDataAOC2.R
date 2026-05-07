@@ -10,6 +10,7 @@ require(Hmisc) ## for stat_summary
 
 # dataFileName <- paste0(dataDirectory, "AOC1_20Ps_10.28.25.csv") # first 16 AOC1_test_forGreg
 dataFileName <- paste0(dataDirectory, "AOC2_11Ps_2.17.26.csv")
+dataFileName <- paste0(dataDirectory, "AOC2_219Ps_5.7.26.csv")
 dateExpr <- "\\d{1,2}.\\d{1,2}.\\d{4}"  ## super simple, easy to be wrong so check
 dataDate <- str_match(dataFileName, dateExpr)
 cat("This data was finished collected on", dataDate, fill=TRUE)
@@ -21,7 +22,9 @@ aoc2.df <- SafeReadCSV(dataFileName)
 ########################
 
 ParticipantsToRemove <- NULL
-ParticipantsToRemove <- c(ParticipantsToRemove, 7)  ## attention check
+ParticipantsToRemove <- c(ParticipantsToRemove, 7, 13, 27, 38, 45, 50, 51, 53, 56, 57, 63, 67, 69, 70,
+                          83, 85, 86, 88, 90, 94, 99, 122, 130, 137, 150, 151, 184, 189, 190, 191, 194,
+                          201, 212, 218)  ## attention check
 
 
 if (!is.null(ParticipantsToRemove)) {
