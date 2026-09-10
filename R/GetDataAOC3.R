@@ -10,6 +10,7 @@ require(Hmisc) ## for stat_summary
 
 # dataFileName <- paste0(dataDirectory, "AOC1_20Ps_10.28.25.csv") # first 16 AOC1_test_forGreg
 dataFileName <- paste0(dataDirectory, "AOC3_5Ps_5.29.26.csv")
+dataFileName <- paste0(dataDirectory, "AOC3_153Ps_9.10.26.csv")
 dateExpr <- "\\d{1,2}.\\d{1,2}.\\d{4}"  ## super simple, easy to be wrong so check
 dataDate <- str_match(dataFileName, dateExpr)
 cat("This data was finished collected on", dataDate, fill=TRUE)
@@ -21,7 +22,8 @@ aoc3.df <- SafeReadCSV(dataFileName)
 ########################
 
 ParticipantsToRemove <- NULL
-ParticipantsToRemove <- c(ParticipantsToRemove)  ## attention check
+ParticipantsToRemove <- c(ParticipantsToRemove, 1, 2, 4, 11, 13, 14, 17, 22, 30, 35, 44, 46, 56,
+                          62, 66, 67, 69, 79, 96, 97, 100, 101, 103, 109, 128, 130, 142, 146)  ## attention check
 
 
 if (!is.null(ParticipantsToRemove)) {
@@ -31,9 +33,9 @@ if (!is.null(ParticipantsToRemove)) {
 
 aoc3.df <- RemoveParticipants(aoc3.df, ParticipantsToRemove, report=TRUE)
 
-aoc3.df <- aoc3.df %>% rename(Subject = subjID)
-aoc3.df <- aoc3.df %>% rename(Condition = condition)
-aoc3.df <- aoc3.df %>% rename(Gender = Sex)
+aoc3.df <- aoc3.df %>% dplyr::rename(Subject = subjID)
+aoc3.df <- aoc3.df %>% dplyr::rename(Condition = condition)
+aoc3.df <- aoc3.df %>% dplyr::rename(Gender = Sex)
 
 ### greg stopped b/c ran out of time
 ### [2026-02-19 Thu 12:06]
@@ -43,11 +45,11 @@ aoc3.df <- aoc3.df %>% rename(Gender = Sex)
 ## ########################
 
 aoc3.long <- aoc3.df %>%
-    pivot_longer(!c(Subject, Condition, video_summary, Gender, Language, Education, Age, Race, expFeedback, Gello_AOC_17, attn_check_missed, X),
+    pivot_longer(!c(Subject, Condition, video_summary, Gender, Language, Education, Age, Race, expFeedback, Jenga_AOC_17, attn_check_missed, X),
                  names_to = "Question",
                  values_to = "Response") %>%
-  mutate(Question = str_replace_all(Question, "\\.", " ")) %>%
-  mutate(Question = str_squish(Question))
+  dplyr::mutate(Question = str_replace_all(Question, "\\.", " ")) %>%
+  dplyr::mutate(Question = str_squish(Question))
 
 
 ## ### df.wide is primarily for psych and correlations

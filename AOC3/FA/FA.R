@@ -3,7 +3,7 @@
 ########################
 require(psych)
 
-experimentName <- "AOC2"
+experimentName <- "AOC3"
 whoami <- Sys.info()[["user"]]
 if (whoami == "trafton") {
   workingDirectory <- "~/Documents/graphics/AOCScale/"
@@ -76,14 +76,14 @@ source(paste0(workingDirectory, "R/GetData", experimentName, ".R"))
 
 ## Look at NumberFactors.R
 
-## unidim(AOC2.itemsOnly) ## is it unidimensional?  bit unsure how to interpret : higher they are the more unidimeionsional
+## unidim(aoc3.itemsOnly) ## is it unidimensional?  bit unsure how to interpret : higher they are the more unidimeionsional
 ### not terrible
-### psych::reliability(AOC2.itemsOnly)
+### psych::reliability(aoc3.itemsOnly)
 
 ## single factor
-## f1 <- fa(AOC2.itemsOnly, nfactors=1)
+## f1 <- fa(aoc3.itemsOnly, nfactors=1)
 ## summary(f1)
-## fa.lookup(f1, dictionary=names(aoc2.itemsOnly))
+## fa.lookup(f1, dictionary=names(aoc3.itemsOnly))
 ## fa.lookup(f1, dictionary=items.dict)
 
 ## ###################################
@@ -95,39 +95,39 @@ source(paste0(workingDirectory, "R/GetData", experimentName, ".R"))
 ##   ### so that means look for close to 1 diagonal
 ## ## > pca1=principal(asiq, nfactors=5, rotate="promax",scores=F)
 ## ## > paf1=fa(asiq,nfactors=5,rotate="varimax",SMC=T,symmetric=T, fm="pa")
-## f2 <- fa(aoc2.itemsOnly, nfactors=2)
-## p2 <- principal(aoc2.itemsOnly,nfactors=2)
+## f2 <- fa(aoc3.itemsOnly, nfactors=2)
+## p2 <- principal(aoc3.itemsOnly,nfactors=2)
 ## factor.congruence(f2,p2)  ## how similar are they? --> pretty similar [looking for ~1 diagonal]
 
-## fa.lookup(f2, dictionary=names(aoc2.itemsOnly))
+## fa.lookup(f2, dictionary=names(aoc3.itemsOnly))
 ## fa.diagram(f2)
 
 ## summary(f2)
 ## ### NOT 2 factors.  none of the items in second dimension are > .35!
 
-## f2 <- fa(aoc2.itemsOnly, nfactors=2, rotate="varimax")
-## fa.lookup(f2, dictionary=names(aoc2.itemsOnly))
+## f2 <- fa(aoc3.itemsOnly, nfactors=2, rotate="varimax")
+## fa.lookup(f2, dictionary=names(aoc3.itemsOnly))
 ## ### reasonable 2 factor solution, though lots of cross loadings!
 ## ## internal (anxious, frightned) vs. external (hazardous, cause pain)
 
 ## ###################################
 ## #######  3 factor solution ########
 ## ###################################
-f3 <- fa(aoc2.itemsOnly, nfactors=3)
-p3 <- principal(aoc2.itemsOnly,nfactors=3)
+f3 <- fa(aoc3.itemsOnly, nfactors=3)
+p3 <- principal(aoc3.itemsOnly,nfactors=3)
 factor.congruence(f3,p3)
 ##fa.lookup(f3, dictionary=items.dict)
-fa.lookup(f3, dictionary=names(aoc2.itemsOnly))
+fa.lookup(f3, dictionary=names(aoc3.itemsOnly))
 
 
 ## ###################################
 ## ######  4 factor solution #########
 ## ###################################
-f4 <- fa(aoc2.itemsOnly, nfactors=4)
-p4 <- principal(aoc2.itemsOnly,nfactors=4)
+f4 <- fa(aoc3.itemsOnly, nfactors=4)
+p4 <- principal(aoc3.itemsOnly,nfactors=4)
 factor.congruence(f4,p4)
 ##fa.lookup(f3, dictionary=items.dict)
-fa.lookup(f4, dictionary=names(aoc2.itemsOnly))
+fa.lookup(f4, dictionary=names(aoc3.itemsOnly))
 
 
 
@@ -135,5 +135,5 @@ fa.lookup(f4, dictionary=names(aoc2.itemsOnly))
 
 ### alpha:
 
-alpha(aoc2.itemsOnly)  ##
-omega(aoc2.itemsOnly, nfactors=3)  ##
+alpha(aoc3.itemsOnly)  ##
+omega(aoc3.itemsOnly, nfactors=3)  ##
